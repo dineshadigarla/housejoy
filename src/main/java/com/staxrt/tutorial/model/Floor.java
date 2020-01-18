@@ -1,32 +1,34 @@
-
 package com.staxrt.tutorial.model;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "buildings")
-@EntityListeners(AuditingEntityListener.class)
-public class Building {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-    @Id
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Entity
+@Table(name = "floors")
+@EntityListeners(AuditingEntityListener.class)
+public class Floor {
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "building_name", nullable = false)
-    private String buildingName;
+    @Column(name = "floor_name", nullable = false)
+    private String floorName;
 
-    @Column(name = "area", nullable = false)
-    private String area;
+    @Column(name = "building_id")
+    private Long buildingId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,20 +50,20 @@ public class Building {
         this.id = id;
     }
 
-  public String getBuildingName() {
-        return buildingName;
+  public String getFloorName() {
+        return floorName;
     }
 
-  public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
+  public void setFloorName(String floorName) {
+        this.floorName = floorName;
     }
 
-  public String getArea() {
-        return area;
+  public Long getBuildingId() {
+        return buildingId;
     }
 
-  public void setArea(String area) {
-        this.area = area;
+  public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
   public Date getCreatedAt() {
@@ -94,10 +96,10 @@ public class Building {
 
     @Override
     public String toString() {
-        return "Building{" +
+        return "Floor{" +
                 "id=" + id +
-                ", buildingName='" + buildingName + '\'' +
-                ", area='" + area + '\'' +
+                ", floorName='" + floorName + '\'' +
+                ", BuildingId='" + buildingId + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
