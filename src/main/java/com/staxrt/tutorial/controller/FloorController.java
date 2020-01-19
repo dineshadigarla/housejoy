@@ -44,6 +44,10 @@ public class FloorController {
   @GetMapping("/buildings/{id}/floors")
   public ResponseEntity<List<Floor>> getFloorsByBuildingId(@PathVariable(value = "id") Long buildingId)
       throws ResourceNotFoundException {
+	  buildingRepository
+      .findById(buildingId)
+      .orElseThrow(() -> new ResourceNotFoundException("Building not found on :: " + buildingId));
+	 
 	  List<Floor> floors=floorRepository.findAll();
 	  List<Floor> filteredFloors=new ArrayList<>();
 	  if(floors!=null)
@@ -58,7 +62,7 @@ public class FloorController {
   public Floor createFloor(@PathVariable(value = "id") Long buildingId,@Valid @ModelAttribute Floor floor) throws ResourceNotFoundException {
 	  buildingRepository
       .findById(buildingId)
-      .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + buildingId));
+      .orElseThrow(() -> new ResourceNotFoundException("Building not found on :: " + buildingId));
       floor.setBuildingId(buildingId);
 	  return floorRepository.save(floor);
   }
@@ -72,7 +76,7 @@ public class FloorController {
     Floor floor =
         floorRepository
             .findById(floorId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + floorId));
+            .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
 
     floor.setFloorName(floorDetails.getFloorName());
     final Floor updatedFloor = floorRepository.save(floor);
@@ -87,7 +91,7 @@ public class FloorController {
     Floor floor =
         floorRepository
             .findById(floorId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + floorId));
+            .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
     return ResponseEntity.ok().body(floor);
   }
 
@@ -97,7 +101,7 @@ public class FloorController {
     Floor floor =
         floorRepository
             .findById(floorId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + floorId));
+            .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
 
     floorRepository.delete(floor);
     Map<String, Boolean> response = new HashMap<>();
@@ -108,7 +112,10 @@ public class FloorController {
   @GetMapping("/floors/{id}/nonassociations")
   public ResponseEntity<List<Desks>> getNonAssociatedDesks(@PathVariable(value = "id") Long floorId)
       throws ResourceNotFoundException {
-    List<Desks> floor =
+	  floorRepository
+      .findById(floorId)
+      .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
+	  List<Desks> floor =
         deskRepository
             .findNonAssociatedDesksForFloor(floorId);
     return ResponseEntity.ok().body(floor);
@@ -117,7 +124,11 @@ public class FloorController {
   @GetMapping("/floors/{id}/associations")
   public ResponseEntity<List<Desks>> getAssociatedDesks(@PathVariable(value = "id") Long floorId)
       throws ResourceNotFoundException {
-    List<Desks> floor =
+      
+	  floorRepository
+      .findById(floorId)
+      .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
+	  List<Desks> floor =
         deskRepository
             .findAssociatedDesksForFloor(floorId);
     return ResponseEntity.ok().body(floor);

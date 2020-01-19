@@ -54,13 +54,18 @@ public class BlockController {
 	    Block block =
 	        blockRepository
 	            .findById(blockId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + blockId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
 	    return ResponseEntity.ok().body(block);
 	  }
 	  
 	  @GetMapping("/blocks/{id}/nonassociations")
 	  public ResponseEntity<List<Desks>> getNonAssociatedDesks(@PathVariable(value = "id") Long blockId)
 	      throws ResourceNotFoundException {
+		  
+		  blockRepository
+          .findById(blockId)
+          .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
+		  
 	    List<Desks> block =
 	        deskRepository
 	            .findNonAssociatedDesksForBlock(blockId);
@@ -70,6 +75,11 @@ public class BlockController {
 	  @GetMapping("/blocks/{id}/associations")
 	  public ResponseEntity<List<Desks>> getAssociatedDesks(@PathVariable(value = "id") Long blockId)
 	      throws ResourceNotFoundException {
+		  
+		  blockRepository
+          .findById(blockId)
+          .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
+		  
 	    List<Desks> block =
 	        deskRepository
 	            .findAssociatedDesksForBlock(blockId);
@@ -78,13 +88,23 @@ public class BlockController {
 	  
 	  
 	  @PostMapping("/floors/{id}/blocks")
-	  public Block createBlock(@PathVariable(value = "id") Long floorId,@Valid @ModelAttribute Block block) {
-	      block.setFloorId(floorId); 
+	  public Block createBlock(@PathVariable(value = "id") Long floorId,@Valid @ModelAttribute Block block) throws ResourceNotFoundException {
+		  floorRepository
+          .findById(floorId)
+          .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
+
+		  block.setFloorId(floorId); 
 		  return blockRepository.save(block);
 	  }
 	  
 	  @GetMapping("/floors/{id}/blocks")
-	  public ResponseEntity<List<Block>> getBlocksByFloor(@PathVariable(value = "id") Long floorId) {
+	  public ResponseEntity<List<Block>> getBlocksByFloor(@PathVariable(value = "id") Long floorId) throws ResourceNotFoundException {
+		  
+		  floorRepository
+          .findById(floorId)
+          .orElseThrow(() -> new ResourceNotFoundException("Floor not found on :: " + floorId));
+
+		  
 		  List<Block> blocks=blockRepository.findAll();
 		  List<Block> filteredBlocks=new ArrayList<>();
 		  if(blocks!=null)
@@ -103,7 +123,7 @@ public class BlockController {
 	    Block block =
 	        blockRepository
 	            .findById(blockId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + blockId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
 
 	    block.setBlockName(blockDetails.getBlockName());
 	    final Block updatedBlock = blockRepository.save(block);
@@ -116,7 +136,7 @@ public class BlockController {
 	    Block block =
 	        blockRepository
 	            .findById(blockId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + blockId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
 
 	    blockRepository.delete(block);
 	    Map<String, Boolean> response = new HashMap<>();
