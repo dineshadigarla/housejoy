@@ -1,6 +1,6 @@
 # HouseJoy
 
-This is a project regarding the problem statement of your Project which was mentioned in SDE_Assignment.pdf
+This is a project regarding the problem statement of the Project which was mentioned in SDE_Assignment.pdf
 
 
 ## Prerequisities
