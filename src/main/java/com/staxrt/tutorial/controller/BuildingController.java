@@ -3,7 +3,10 @@ package com.staxrt.tutorial.controller;
 
 import com.staxrt.tutorial.exception.ResourceNotFoundException;
 import com.staxrt.tutorial.model.Building;
+import com.staxrt.tutorial.model.Desks;
 import com.staxrt.tutorial.repository.BuildingRepository;
+import com.staxrt.tutorial.repository.DeskRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,9 @@ public class BuildingController {
 
   @Autowired
   private BuildingRepository buildingRepository;
+  
+  @Autowired
+  private DeskRepository deskRepository;
 
  
   @GetMapping("/buildings")
@@ -75,5 +81,14 @@ public class BuildingController {
     Map<String, Boolean> response = new HashMap<>();
     response.put("deleted", Boolean.TRUE);
     return response;
+  }
+  
+  @GetMapping("/buildings/{id}/nonassociations")
+  public ResponseEntity<List<Desks>> getNonAssociatedDesks(@PathVariable(value = "id") Long buildingId)
+      throws ResourceNotFoundException {
+    List<Desks> building =
+        deskRepository
+            .findNonAssociatedDesksForBuilding(buildingId);
+    return ResponseEntity.ok().body(building);
   }
 }
