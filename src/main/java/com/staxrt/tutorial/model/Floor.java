@@ -16,9 +16,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.Data;
+
 @Entity
 @Table(name = "floors")
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Floor {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,59 +43,6 @@ public class Floor {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-
-
-  public long getId() {
-        return id;
-    }
-
-  public void setId(long id) {
-        this.id = id;
-    }
-
-  public String getFloorName() {
-        return floorName;
-    }
-
-  public void setFloorName(String floorName) {
-        this.floorName = floorName;
-    }
-
-  public Long getBuildingId() {
-        return buildingId;
-    }
-
-  public void setBuildingId(Long buildingId) {
-        this.buildingId = buildingId;
-    }
-
-  public Date getCreatedAt() {
-        return createdAt;
-    }
-
-  public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-
-  /**
-   * Gets updated at.
-   *
-   * @return the updated at
-   */
-  public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-  /**
-   * Sets updated at.
-   *
-   * @param updatedAt the updated at
-   */
-  public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
 
     @Override
     public String toString() {
