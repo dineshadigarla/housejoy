@@ -30,10 +30,9 @@ create database users_database
 
 ```bash
 mvn package
-java -jar target/spring-boot-rest-api-tutorial-0.0.1-SNAPSHOT.jar
 
 ```
-Alternatively, you can run the app without packaging it using -
+You can run the app without packaging it using -
 
 ```bash
 mvn spring-boot:run
@@ -51,20 +50,31 @@ The Following are the CRUD API
 **1. Buildings**
 ```
 GET /api/v1/buildings (Get the List Of Buildings)
+
 POST /api/v1/buildings (Create the Building)
+
 GET /api/v1/buildings/{id} (Get the building by ID)
+
 PUT /api/v1/buildings/{id} (Update the Building)
+
 DELETE /api/v1/buildings/{id} (Delete the building)
+
 ```
 
 **2. Floors**
 ```
 GET /api/v1/floors (Get the list of Floors)
+
 POST /api/v1/buildings/{id}/floors (Creates the floor and maps the floor with the building id)
+
 GET /api/v1/floors/{id} (Get the floor by Id)
+
 GET /api/v1/buildings/{id}/floors (Gets the Floors based on buildingID)
+
 PUT /api/v1/floors/{id} (updates the Floor)
+
 DELETE /api/v1/floors/{id} (Deletes the floor)
+
 ```
 **3. Blocks**
 ```
