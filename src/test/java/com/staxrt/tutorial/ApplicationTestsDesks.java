@@ -50,7 +50,7 @@ public class ApplicationTestsDesks {
 
 	@Test
 	public void testGetDeskById() {
-		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/1", Desks.class);
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/"+ApplicationTestConstants.deskId, Desks.class);
 		System.out.println(desk.getDeskName());
 		Assert.assertNotNull(desk);
 	}
@@ -60,41 +60,40 @@ public class ApplicationTestsDesks {
 		Desks desk = new Desks();
 		desk.setDeskName("mytri");
 	
-		ResponseEntity<Desks> postResponse = restTemplate.postForEntity(getRootUrl() + "/blocks/1/desks", desk, Desks.class);
+		ResponseEntity<Desks> postResponse = restTemplate.postForEntity(getRootUrl() + "/blocks/"+ApplicationTestConstants.blockId+"/desks", desk, Desks.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
 	}
 
 	@Test
 	public void testUpdateDesk() {
-		int id = 1;
-		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId, Desks.class);
 		desk.setDeskName("wakanda");
 
-		restTemplate.put(getRootUrl() + "/desks/" + id, desk);
+		restTemplate.put(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId, desk);
 
-		Block updatedBlock = restTemplate.getForObject(getRootUrl() + "/blocks/" + id, Block.class);
-		Assert.assertNotNull(updatedBlock);
+		Desks updatedDesk = restTemplate.getForObject(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId, Desks.class);
+		Assert.assertNotNull(updatedDesk);
 	}
 	
 	@Test
-	public void testFloorsByBuildingId() {
-		int id=1;
-		Floor user = restTemplate.getForObject(getRootUrl() + "buildings/"+id+"/floors/", Floor.class);
-		System.out.println(user.getFloorName());
+	public void testDesksByBlockId() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+		ResponseEntity<String> user = restTemplate.exchange(getRootUrl() + "/blocks/"+ApplicationTestConstants.blockId+"/desks/", HttpMethod.GET, entity,String.class);
+		System.out.println(user);
 		Assert.assertNotNull(user);
 	}
 
 	@Test
 	public void testDeleteDesk() {
-		int id = 2;
-		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId, Desks.class);
 		Assert.assertNotNull(desk);
 
-		restTemplate.delete(getRootUrl() + "/desks/" + id);
+		restTemplate.delete(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId);
 
 		try {
-			desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
+			desk = restTemplate.getForObject(getRootUrl() + "/desks/" + ApplicationTestConstants.deskId, Desks.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}
