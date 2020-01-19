@@ -67,6 +67,14 @@ public class BlockController {
 	    return ResponseEntity.ok().body(block);
 	  }
 
+	  @GetMapping("/blocks/{id}/associations")
+	  public ResponseEntity<List<Desks>> getAssociatedDesks(@PathVariable(value = "id") Long blockId)
+	      throws ResourceNotFoundException {
+	    List<Desks> block =
+	        deskRepository
+	            .findAssociatedDesksForBlock(blockId);
+	    return ResponseEntity.ok().body(block);
+	  }
 	  
 	  
 	  @PostMapping("/floors/{id}/blocks")
