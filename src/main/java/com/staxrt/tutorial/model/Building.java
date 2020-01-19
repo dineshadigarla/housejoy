@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Date;
 @Entity
 @Table(name = "buildings")
 @EntityListeners(AuditingEntityListener.class)
+@Data
 public class Building {
 
     @Id
@@ -38,58 +41,6 @@ public class Building {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
     private Date updatedAt;
-
-
-  public long getId() {
-        return id;
-    }
-
-  public void setId(long id) {
-        this.id = id;
-    }
-
-  public String getBuildingName() {
-        return buildingName;
-    }
-
-  public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
-    }
-
-  public String getArea() {
-        return area;
-    }
-
-  public void setArea(String area) {
-        this.area = area;
-    }
-
-  public Date getCreatedAt() {
-        return createdAt;
-    }
-
-  public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-
-  /**
-   * Gets updated at.
-   *
-   * @return the updated at
-   */
-  public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-  /**
-   * Sets updated at.
-   *
-   * @param updatedAt the updated at
-   */
-  public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
 
     @Override
