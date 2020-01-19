@@ -23,7 +23,7 @@ public class ApplicationTests {
 	private int port;
 
 	private String getRootUrl() {
-		return "http://localhost:" + port;
+		return "http://localhost:" + port+"/api/v1";
 	}
 
 	@Test
@@ -37,7 +37,6 @@ public class ApplicationTests {
 
 		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/buildings",
 				HttpMethod.GET, entity, String.class);
-
 		Assert.assertNotNull(response.getBody());
 	}
 

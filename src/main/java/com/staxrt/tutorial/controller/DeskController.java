@@ -1,8 +1,10 @@
 package com.staxrt.tutorial.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -41,7 +43,7 @@ public class DeskController {
 	  }
 
 	  
-	  @GetMapping("/desk/{id}")
+	  @GetMapping("/desks/{id}")
 	  public ResponseEntity<Desks> getDeskById(@PathVariable(value = "id") Long deskId)
 	      throws ResourceNotFoundException {
 	    Desks desk =
@@ -54,14 +56,14 @@ public class DeskController {
 	  
 	  
 	  @PostMapping("/blocks/{id}/desks")
-	  public Desks createBlock(@PathVariable(value = "id") Long blockId,@Valid @ModelAttribute Desks desk) {
+	  public Desks createDesk(@PathVariable(value = "id") Long blockId,@Valid @ModelAttribute Desks desk) {
 	      desk.setBlockId(blockId); 
 		  return deskRepository.save(desk);
 	  }
 
 	 
-	  @PutMapping("/desk/{id}")
-	  public ResponseEntity<Desks> updateBlock(
+	  @PutMapping("/desks/{id}")
+	  public ResponseEntity<Desks> updateDesk(
 	      @PathVariable(value = "id") Long deskId, @Valid @ModelAttribute Desks deskDetails)
 	      throws ResourceNotFoundException {
 
@@ -76,7 +78,7 @@ public class DeskController {
 	  }
 
 	  
-	  @DeleteMapping("/desk/{id}")
+	  @DeleteMapping("/desks/{id}")
 	  public Map<String, Boolean> deleteDesk(@PathVariable(value = "id") Long deskId) throws Exception {
 	    Desks desk =
 	        deskRepository
@@ -87,6 +89,17 @@ public class DeskController {
 	    Map<String, Boolean> response = new HashMap<>();
 	    response.put("deleted", Boolean.TRUE);
 	    return response;
+	  }
+	  
+	  @GetMapping("/blocks/{id}/desks")
+	  public ResponseEntity<List<Desks>> getDesksByBlock(@PathVariable(value = "id") Long blockId) {
+		  List<Desks> desks=deskRepository.findAll();
+		  List<Desks> filteredDesks=new ArrayList<>();
+		  if(desks!=null)
+	    filteredDesks =
+	       desks.stream().filter(block -> block.getBlockId()==blockId).collect(Collectors.toList());
+	    return ResponseEntity.ok().body(filteredDesks);
+
 	  }
 	  
 	  @GetMapping("/desks/associations")
