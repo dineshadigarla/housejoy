@@ -137,6 +137,8 @@ GET /api/v1/employee/associations (Get the Employee which are associated)
 
 GET /api/v1/employee/nonassociation (Get the Employee which are not associated)
 ```
+## Schema and Relations
++ Schemas and relationships(DDL)  are defined in `schema.sql` present in src/main/resources/application.properties
 
 ## Contributing
 Pull requests are welcome.
