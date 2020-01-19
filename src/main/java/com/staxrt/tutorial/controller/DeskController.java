@@ -49,15 +49,18 @@ public class DeskController {
 	    Desks desk =
 	        deskRepository
 	            .findById(deskId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + deskId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Desk not found on :: " + deskId));
 	    return ResponseEntity.ok().body(desk);
 	  }
 
 	  
 	  
 	  @PostMapping("/blocks/{id}/desks")
-	  public Desks createDesk(@PathVariable(value = "id") Long blockId,@Valid @ModelAttribute Desks desk) {
-	      desk.setBlockId(blockId); 
+	  public Desks createDesk(@PathVariable(value = "id") Long blockId,@Valid @ModelAttribute Desks desk) throws ResourceNotFoundException{
+		 blockRepository
+			            .findById(blockId)
+			            .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId));
+		  desk.setBlockId(blockId); 
 		  return deskRepository.save(desk);
 	  }
 
@@ -70,7 +73,7 @@ public class DeskController {
 	    Desks desk =
 	        deskRepository
 	            .findById(deskId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + deskId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Desk not found on :: " + deskId));
 
 	    desk.setDeskName(deskDetails.getDeskName());
 	    final Desks updatedDesk = deskRepository.save(desk);
@@ -83,7 +86,7 @@ public class DeskController {
 	    Desks desk =
 	        deskRepository
 	            .findById(deskId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + deskId));
+	            .orElseThrow(() -> new ResourceNotFoundException("Desk not found on :: " + deskId));
 
 	    deskRepository.delete(desk);
 	    Map<String, Boolean> response = new HashMap<>();
@@ -92,7 +95,10 @@ public class DeskController {
 	  }
 	  
 	  @GetMapping("/blocks/{id}/desks")
-	  public ResponseEntity<List<Desks>> getDesksByBlock(@PathVariable(value = "id") Long blockId) {
+	  public ResponseEntity<List<Desks>> getDesksByBlock(@PathVariable(value = "id") Long blockId) throws ResourceNotFoundException{
+			        blockRepository
+			            .findById(blockId)
+			            .orElseThrow(() -> new ResourceNotFoundException("Block not found on :: " + blockId)); 
 		  List<Desks> desks=deskRepository.findAll();
 		  List<Desks> filteredDesks=new ArrayList<>();
 		  if(desks!=null)
