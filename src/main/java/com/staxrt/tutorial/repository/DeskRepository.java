@@ -22,5 +22,14 @@ public interface DeskRepository extends JpaRepository<Desks, Long> {
     List<Desks> findNonAssociatedDesksForFloor(Long floorId);
 	
 	@Query(value="select * FROM DESKS  LEFT JOIN EMPLOYEES  ON desks.id=employees.desk_id WHERE employees.employee_name is NULL and desks.block_id in (select id from blocks where floor_id=(select id from floors where building_id=?1))",nativeQuery=true)
-    List<Desks> findNonAssociatedDesksForBuilding(Long floorId);
+    List<Desks> findNonAssociatedDesksForBuilding(Long buildingId);
+	
+	@Query(value="select * FROM DESKS  LEFT JOIN EMPLOYEES  ON desks.id=employees.desk_id WHERE employees.employee_name is NOT NULL and desks.block_id=?1",nativeQuery=true)
+    List<Desks> findAssociatedDesksForBlock(Long blockId);
+	
+	@Query(value="select * FROM DESKS  LEFT JOIN EMPLOYEES  ON desks.id=employees.desk_id WHERE employees.employee_name is NOT NULL and desks.block_id in (select id from blocks where floor_id=?1)",nativeQuery=true)
+    List<Desks> findAssociatedDesksForFloor(Long floorId);
+	
+	@Query(value="select * FROM DESKS  LEFT JOIN EMPLOYEES  ON desks.id=employees.desk_id WHERE employees.employee_name is NOT NULL and desks.block_id in (select id from blocks where floor_id=(select id from floors where building_id=?1))",nativeQuery=true)
+    List<Desks> findAssociatedDesksForBuilding(Long buildingId);
 }

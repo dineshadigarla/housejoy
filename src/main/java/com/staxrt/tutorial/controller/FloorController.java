@@ -113,5 +113,14 @@ public class FloorController {
             .findNonAssociatedDesksForFloor(floorId);
     return ResponseEntity.ok().body(floor);
   }
+  
+  @GetMapping("/floors/{id}/associations")
+  public ResponseEntity<List<Desks>> getAssociatedDesks(@PathVariable(value = "id") Long floorId)
+      throws ResourceNotFoundException {
+    List<Desks> floor =
+        deskRepository
+            .findAssociatedDesksForFloor(floorId);
+    return ResponseEntity.ok().body(floor);
+  }
 }
 

@@ -91,4 +91,13 @@ public class BuildingController {
             .findNonAssociatedDesksForBuilding(buildingId);
     return ResponseEntity.ok().body(building);
   }
+  
+  @GetMapping("/buildings/{id}/associations")
+  public ResponseEntity<List<Desks>> getAssociatedDesks(@PathVariable(value = "id") Long buildingId)
+      throws ResourceNotFoundException {
+    List<Desks> building =
+        deskRepository
+            .findAssociatedDesksForBuilding(buildingId);
+    return ResponseEntity.ok().body(building);
+  }
 }
