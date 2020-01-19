@@ -1,9 +1,11 @@
 package com.staxrt.tutorial.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -22,6 +24,7 @@ import com.staxrt.tutorial.exception.ResourceNotFoundException;
 import com.staxrt.tutorial.model.Block;
 import com.staxrt.tutorial.model.Building;
 import com.staxrt.tutorial.model.Desks;
+import com.staxrt.tutorial.model.Floor;
 import com.staxrt.tutorial.repository.BlockRepository;
 import com.staxrt.tutorial.repository.DeskRepository;
 import com.staxrt.tutorial.repository.FloorRepository;
@@ -46,7 +49,7 @@ public class BlockController {
 
 	  
 	  @GetMapping("/blocks/{id}")
-	  public ResponseEntity<Block> getBuildingsById(@PathVariable(value = "id") Long blockId)
+	  public ResponseEntity<Block> getBlocksById(@PathVariable(value = "id") Long blockId)
 	      throws ResourceNotFoundException {
 	    Block block =
 	        blockRepository
@@ -71,6 +74,17 @@ public class BlockController {
 	      block.setFloorId(floorId); 
 		  return blockRepository.save(block);
 	  }
+	  
+	  @GetMapping("/floors/{id}/blocks")
+	  public ResponseEntity<List<Block>> getBlocksByFloor(@PathVariable(value = "id") Long floorId) {
+		  List<Block> blocks=blockRepository.findAll();
+		  List<Block> filteredBlocks=new ArrayList<>();
+		  if(blocks!=null)
+	    filteredBlocks =
+	       blocks.stream().filter(block -> block.getFloorId()==floorId).collect(Collectors.toList());
+	    return ResponseEntity.ok().body(filteredBlocks);
+
+	  }
 
 	 
 	  @PutMapping("/blocks/{id}")
@@ -89,8 +103,8 @@ public class BlockController {
 	  }
 
 	  
-	  @DeleteMapping("/block/{id}")
-	  public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long blockId) throws Exception {
+	  @DeleteMapping("/blocks/{id}")
+	  public Map<String, Boolean> deleteBlocks(@PathVariable(value = "id") Long blockId) throws Exception {
 	    Block block =
 	        blockRepository
 	            .findById(blockId)

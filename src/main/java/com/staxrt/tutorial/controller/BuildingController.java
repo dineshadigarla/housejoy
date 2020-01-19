@@ -70,7 +70,7 @@ public class BuildingController {
   }
 
   
-  @DeleteMapping("/building/{id}")
+  @DeleteMapping("/buildings/{id}")
   public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long buildingId) throws Exception {
     Building building =
         buildingRepository

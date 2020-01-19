@@ -16,11 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.staxrt.tutorial.model.Block;
+import com.staxrt.tutorial.model.Desks;
 import com.staxrt.tutorial.model.Floor;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ApplicationTestsBlock {
+public class ApplicationTestsDesks {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -37,40 +38,40 @@ public class ApplicationTestsBlock {
 	}
 
 	@Test
-	public void testGetAllBlocks() {
+	public void testGetAllDesks() {
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/blocks",
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/desks",
 				HttpMethod.GET, entity, String.class);
 
 		Assert.assertNotNull(response.getBody());
 	}
 
 	@Test
-	public void testGetBlockById() {
-		Block block = restTemplate.getForObject(getRootUrl() + "/blocks/1", Block.class);
-		System.out.println(block.getBlockName());
-		Assert.assertNotNull(block);
+	public void testGetDeskById() {
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/1", Desks.class);
+		System.out.println(desk.getDeskName());
+		Assert.assertNotNull(desk);
 	}
 
 	@Test
-	public void testCreateBlock() {
-		Block block = new Block();
-		block.setBlockName("mytri");
+	public void testCreateDesk() {
+		Desks desk = new Desks();
+		desk.setDeskName("mytri");
 	
-		ResponseEntity<Floor> postResponse = restTemplate.postForEntity(getRootUrl() + "/floors/1/blocks", block, Floor.class);
+		ResponseEntity<Desks> postResponse = restTemplate.postForEntity(getRootUrl() + "/blocks/1/desks", desk, Desks.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
 	}
 
 	@Test
-	public void testUpdateBlock() {
+	public void testUpdateDesk() {
 		int id = 1;
-		Block block = restTemplate.getForObject(getRootUrl() + "/blocks/" + id, Block.class);
-		block.setBlockName("mytri");
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
+		desk.setDeskName("wakanda");
 
-		restTemplate.put(getRootUrl() + "/blocks/" + id, block);
+		restTemplate.put(getRootUrl() + "/desks/" + id, desk);
 
 		Block updatedBlock = restTemplate.getForObject(getRootUrl() + "/blocks/" + id, Block.class);
 		Assert.assertNotNull(updatedBlock);
@@ -85,20 +86,42 @@ public class ApplicationTestsBlock {
 	}
 
 	@Test
-	public void testDeleteBlock() {
+	public void testDeleteDesk() {
 		int id = 2;
-		Floor user = restTemplate.getForObject(getRootUrl() + "/blocks/" + id, Floor.class);
-		Assert.assertNotNull(user);
+		Desks desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
+		Assert.assertNotNull(desk);
 
-		restTemplate.delete(getRootUrl() + "/blocks/" + id);
+		restTemplate.delete(getRootUrl() + "/desks/" + id);
 
 		try {
-			user = restTemplate.getForObject(getRootUrl() + "/blocks/" + id, Floor.class);
+			desk = restTemplate.getForObject(getRootUrl() + "/desks/" + id, Desks.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}
 	}
 
+	@Test
+	public void testGetNonAssociatedDesks() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/desks/nonassociations",
+				HttpMethod.GET, entity, String.class);
+
+		System.out.println(response.getBody());
+		Assert.assertNotNull(response.getBody());
+	}
+	
+	@Test
+	public void testGetAssociatedDesks() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/desks/associations",
+				HttpMethod.GET, entity, String.class);
+
+		System.out.println(response.getBody());
+		Assert.assertNotNull(response.getBody());
+	}
 
 }
-
