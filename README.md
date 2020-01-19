@@ -1,6 +1,6 @@
 # HouseJoy
 
-This is a project regarding the problem statement of the Project which was mentioned in SDE_Assignment.pdf
+This is a project regarding the problem statement of your Project which was mentioned in SDE_Assignment.pdf
 
 
 ## Prerequisities
@@ -9,30 +9,42 @@ This is a project regarding the problem statement of the Project which was menti
 
 [Mysql 5.7](https://dev.mysql.com/downloads/windows/installer/5.7.html) 
 
+[Lombok](https://projectlombok.org/) (For Auto Generation of Getters and Setters in your Model Classes)
+
 ## Steps to Setup
 
 **1. Clone the git Repository**
 ```bash
 git clone git@github.com:dineshadigarla/housejoy.git
 ```
-**2. Create the Database**
+
+**2 Install Lombok in your Eclipse**
+
+You can Install Lombok in your eclipse by following the below Link.
+
+```
+https://projectlombok.org/setup/eclipse
+```
+
+**3. Create the Database**
 
 We need to create the database and the tables will be automatically created when we run the application.
 
 ```
 create database users_database
 ```
-**3. Change Mysql username and password in your application.properties**
+**4. Change Mysql username and password in your application.properties**
 
 + change  `spring.datasource.username` and `spring.datasource.password` as per your mysql installation
 
-**4. Build and run the app using maven**
+**5. Build and run the app using maven**
 
 ```bash
 mvn package
+java -jar target/spring-boot-rest-api-tutorial-0.0.1-SNAPSHOT.jar
 
 ```
-You can run the app without packaging it using -
+Alternatively, you can run the app without packaging it using -
 
 ```bash
 mvn spring-boot:run
@@ -58,7 +70,6 @@ GET /api/v1/buildings/{id} (Get the building by ID)
 PUT /api/v1/buildings/{id} (Update the Building)
 
 DELETE /api/v1/buildings/{id} (Delete the building)
-
 ```
 
 **2. Floors**
@@ -74,7 +85,6 @@ GET /api/v1/buildings/{id}/floors (Gets the Floors based on buildingID)
 PUT /api/v1/floors/{id} (updates the Floor)
 
 DELETE /api/v1/floors/{id} (Deletes the floor)
-
 ```
 **3. Blocks**
 ```
@@ -137,6 +147,12 @@ GET /api/v1/employee/associations (Get the Employee which are associated)
 
 GET /api/v1/employee/nonassociation (Get the Employee which are not associated)
 ```
+## TestCases
+Have written Integration Tests for every API and these are present in
+
+```
+src/main/test
+``` 
 
 ## Contributing
 Pull requests are welcome.
