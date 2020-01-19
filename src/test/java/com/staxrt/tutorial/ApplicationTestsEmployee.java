@@ -49,12 +49,11 @@ public class ApplicationTestsEmployee {
 
 	@Test
 	public void testGetEmployeeByDeskId() {
-		int id = 7;
 		
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 
-		ResponseEntity<Employee> response = restTemplate.exchange(getRootUrl() + "/desks/"+id+"/employees",HttpMethod.GET, entity, Employee.class);
+		ResponseEntity<Employee> response = restTemplate.exchange(getRootUrl() + "/desks/"+ApplicationTestConstants.deskId+"/employees",HttpMethod.GET, entity, Employee.class);
 		System.out.println(response.getBody());
 		Assert.assertNotNull(response.getBody());
 	}
@@ -64,7 +63,7 @@ public class ApplicationTestsEmployee {
 		Employee user = new Employee();
 		user.setEmployeeName("dinesh");
 	
-		ResponseEntity<Employee> postResponse = restTemplate.postForEntity(getRootUrl() + "/desk/7/employees", user, Employee.class);
+		ResponseEntity<Employee> postResponse = restTemplate.postForEntity(getRootUrl() + "/desk/"+ApplicationTestConstants.deskId+"/employees", user, Employee.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
 	}
@@ -73,13 +72,13 @@ public class ApplicationTestsEmployee {
 	@Test
 	public void testDeleteEmployee() {
 		int id = 2;
-		Employee user = restTemplate.getForObject(getRootUrl() + "/employee/" + id, Employee.class);
+		Employee user = restTemplate.getForObject(getRootUrl() + "/employee/" + ApplicationTestConstants.employeeId, Employee.class);
 		Assert.assertNotNull(user);
 
 		restTemplate.delete(getRootUrl() + "/floor/" + id);
 
 		try {
-			user = restTemplate.getForObject(getRootUrl() + "/floors/" + id, Employee.class);
+			user = restTemplate.getForObject(getRootUrl() + "/employees/" + ApplicationTestConstants.employeeId, Employee.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}

@@ -42,48 +42,68 @@ public class ApplicationTests {
 
 	@Test
 	public void testGetBuildingById() {
-		Building user = restTemplate.getForObject(getRootUrl() + "/buildings/1", Building.class);
-		System.out.println(user.getBuildingName());
-		Assert.assertNotNull(user);
+		Building building = restTemplate.getForObject(getRootUrl() + "/buildings/"+ApplicationTestConstants.buildingId, Building.class);
+		System.out.println(building.getBuildingName());
+		Assert.assertNotNull(building);
 	}
 
 	@Test
 	public void testCreateBuilding() {
-		Building user = new Building();
-		user.setBuildingName("mytri");
-		user.setArea("asgard");
+		Building building = new Building();
+		building.setBuildingName("mytri");
+		building.setArea("asgard");
 	
-		ResponseEntity<Building> postResponse = restTemplate.postForEntity(getRootUrl() + "/buildings", user, Building.class);
+		ResponseEntity<Building> postResponse = restTemplate.postForEntity(getRootUrl() + "/buildings", building, Building.class);
 		Assert.assertNotNull(postResponse);
 		Assert.assertNotNull(postResponse.getBody());
 	}
 
 	@Test
 	public void testUpdateBuilding() {
-		int id = 1;
-		Building user = restTemplate.getForObject(getRootUrl() + "/buildings/" + id, Building.class);
+		Building user = restTemplate.getForObject(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId, Building.class);
 		user.setBuildingName("mytri");
 		user.setArea("asgard");
 
-		restTemplate.put(getRootUrl() + "/buildings/" + id, user);
+		restTemplate.put(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId, user);
 
-		Building updatedUser = restTemplate.getForObject(getRootUrl() + "/buildings/" + id, Building.class);
+		Building updatedUser = restTemplate.getForObject(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId, Building.class);
 		Assert.assertNotNull(updatedUser);
 	}
 
 	@Test
 	public void testDeletePost() {
 		int id = 2;
-		Building user = restTemplate.getForObject(getRootUrl() + "/buildings/" + id, Building.class);
+		Building user = restTemplate.getForObject(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId, Building.class);
 		Assert.assertNotNull(user);
 
-		restTemplate.delete(getRootUrl() + "/buildings/" + id);
+		restTemplate.delete(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId);
 
 		try {
-			user = restTemplate.getForObject(getRootUrl() + "/buildings/" + id, Building.class);
+			user = restTemplate.getForObject(getRootUrl() + "/buildings/" + ApplicationTestConstants.buildingId, Building.class);
 		} catch (final HttpClientErrorException e) {
 			Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
 		}
 	}
 
+	@Test
+	public void testAssociatedDesks() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/buildings/"+ApplicationTestConstants.buildingId+"/associations",
+				HttpMethod.GET, entity, String.class);
+		System.out.println("Associated Blocks "+response.getBody());
+		Assert.assertNotNull(response.getBody());
+	}
+	
+	@Test
+	public void testNonAssociatedDesks() {
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(getRootUrl() + "/buildings/"+ApplicationTestConstants.buildingId+"/nonassociations",
+				HttpMethod.GET, entity, String.class);
+		System.out.println("Non Associated Blocks are "+response.getBody());
+		Assert.assertNotNull(response.getBody());
+	}
 }
